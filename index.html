@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Flipper-ui by jnunemaker</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Flipper-ui</h1>
+        <p>UI for the Flipper gem</p>
+
+        <p class="view"><a href="https://github.com/jnunemaker/flipper-ui">View the Project on GitHub <small>jnunemaker/flipper-ui</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/jnunemaker/flipper-ui/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/jnunemaker/flipper-ui/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/jnunemaker/flipper-ui">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Flipper::UI</h1>
+
+<p>UI for the <a href="https://github.com/jnunemaker/flipper">Flipper</a> gem. <strong>Note</strong>: This is not fully functional yet. The end product will look like this:</p>
+
+<p><img src="http://dribbble.s3.amazonaws.com/users/59/screenshots/704704/attachments/65188/flipper.png" alt="flipper web"></p>
+
+<h2>Installation</h2>
+
+<p>Add this line to your application's Gemfile:</p>
+
+<pre><code>gem 'flipper-ui'
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre><code>$ bundle
+</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre><code>$ gem install flipper-ui
+</code></pre>
+
+<h2>Usage</h2>
+
+<h3>Rails</h3>
+
+<p>Given that you've already initialized <code>Flipper</code> as per the <a href="https://github.com/jnunemaker/flipper">flipper</a> readme:</p>
+
+<div class="highlight"><pre><span class="c1"># config/initializers/flipper.rb</span>
+<span class="vg">$flipper</span> <span class="o">=</span> <span class="no">Flipper</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">.</span><span class="n">.</span><span class="o">.</span><span class="p">)</span>
+</pre></div>
+
+<p>you can mount <code>Flipper::UI</code> to a route of your choice:</p>
+
+<div class="highlight"><pre><span class="c1"># config/routes.rb</span>
+
+<span class="ss">YourRailsApp</span><span class="p">:</span><span class="ss">:Application</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">draw</span> <span class="k">do</span>
+  <span class="n">mount</span> <span class="ss">Flipper</span><span class="p">:</span><span class="ss">:UI</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="vg">$flipper</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="s1">'/flipper'</span>
+<span class="k">end</span>
+</pre></div>
+
+<h4>Security</h4>
+
+<p>You almost certainly want to limit access when using Flipper::UI in production. Using <a href="http://guides.rubyonrails.org/routing.html#request-based-constraints">routes constraints</a> is one way to achieve this:</p>
+
+<div class="highlight"><pre><span class="c1"># config/routes.rb</span>
+
+<span class="n">flipper_constraint</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">request</span><span class="o">|</span> <span class="n">request</span><span class="o">.</span><span class="n">remote_ip</span> <span class="o">==</span> <span class="s1">'127.0.0.1'</span> <span class="p">}</span>
+<span class="n">constraints</span> <span class="n">flipper_constraint</span> <span class="k">do</span>
+  <span class="n">mount</span> <span class="ss">Flipper</span><span class="p">:</span><span class="ss">:UI</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="vg">$flipper</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="s1">'/flipper'</span>
+<span class="k">end</span>
+</pre></div>
+
+<h3>Standalone</h3>
+
+<p>Minimal example for Rack:</p>
+
+<div class="highlight"><pre><span class="c1"># config.ru</span>
+
+<span class="nb">require</span> <span class="s1">'flipper-ui'</span>
+<span class="nb">require</span> <span class="s1">'flipper/adapters/memory'</span>
+
+<span class="n">adapter</span> <span class="o">=</span> <span class="ss">Flipper</span><span class="p">:</span><span class="ss">:Adapters</span><span class="o">::</span><span class="no">Memory</span><span class="o">.</span><span class="n">new</span>
+<span class="n">flipper</span> <span class="o">=</span> <span class="no">Flipper</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">adapter</span><span class="p">)</span>
+
+<span class="n">run</span> <span class="ss">Flipper</span><span class="p">:</span><span class="ss">:UI</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="n">flipper</span><span class="p">)</span>
+</pre></div>
+
+<p>See <a href="https://github.com/jnunemaker/flipper-ui/blob/master/examples/basic.ru">examples/basic.ru</a> for a more full example</p>
+
+<h2>Contributing</h2>
+
+<ol>
+<li>Fork it</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>
+<strong>Fire up the app</strong> (<code>bundle exec rake start</code>)</li>
+<li>
+<strong>Start up guard</strong> (<code>bundle exec guard</code> for automatic coffeescript/sass compilation and such).</li>
+<li>Commit your changes (<code>git commit -am 'Added some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create new Pull Request</li>
+</ol>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/jnunemaker">jnunemaker</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
