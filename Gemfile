@@ -6,6 +6,7 @@ gem 'shotgun'
 gem 'rspec'
 gem 'rack-test'
 gem 'activesupport'
+gem 'jasmine'
 
 group(:guard) do
   gem 'guard'

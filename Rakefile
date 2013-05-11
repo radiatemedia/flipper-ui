@@ -11,3 +11,12 @@ task :start do
   puts 'Starting flipper on port 9999'
   `bundle exec rackup examples/basic.ru -p 9999`
 end
+
+begin
+  require 'jasmine'
+  load 'jasmine/tasks/jasmine.rake'
+rescue LoadError
+  task :jasmine do
+    abort "Jasmine is not available. In order to run jasmine, you must: (sudo) gem install jasmine"
+  end
+end
